@@ -57,7 +57,13 @@ export const getRequestById = async (req = request, res = response) => {
         r."requestDate",
         r."requestSemester",
         rs."state_name",
-        a.assistantship_name
+        a.assistantship_name,
+        st.telefono,
+        st.correo,
+        dir."direccionName" AS direccion,
+        res."residenciaName" AS residencia,
+        st."dependenciaEconomica",
+        st."ingresosF"
       FROM 
         request r
       INNER JOIN 
@@ -66,6 +72,10 @@ export const getRequestById = async (req = request, res = response) => {
         request_states rs ON r."stateId" = rs."stateId"
       INNER JOIN 
         student st ON r."cedula" = st."cedula"
+      LEFT JOIN
+        direccion dir ON st."direccionId" = dir."direccionId"
+      LEFT JOIN
+        residencia res ON st."residenciaId" = res."residenciaId"
       LEFT JOIN 
         assistantship a ON r."assistantshipId" = a."assistantshipId"
       WHERE 
