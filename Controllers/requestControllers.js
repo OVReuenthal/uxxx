@@ -19,7 +19,7 @@ export const getRequests = async (req = request, res = response) => {
                 FROM 
                     request r
                 INNER JOIN 
-                    services s ON r."service" = s."serviceId"
+                    services s ON r."serviceId" = s."serviceId"
                 INNER JOIN 
                     request_states rs ON r."stateId" = rs."stateId"
                 INNER JOIN 
