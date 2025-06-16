@@ -25,6 +25,16 @@ requestRouter.post(
     check("cedula", "La cédula es obligatoria").notEmpty(),
     check("requestDate", "La fecha de solicitud es obligatoria y debe tener formato YYYY-MM-DD").isISO8601(),
     check("requestSemester", "El semestre de solicitud es obligatorio y debe ser numérico").isInt(),
+
+    // Nuevos campos requeridos para actualizar datos del estudiante
+    check("telefono", "El número de teléfono es obligatorio").notEmpty(),
+    check("correo", "Debe proporcionar un correo válido").isEmail(),
+    check("direccionId", "El ID de dirección es obligatorio y debe ser numérico").isInt(),
+    check("residenciaId", "El ID de residencia es obligatorio y debe ser numérico").isInt(),
+    check("dependencia_economica", "La dependencia económica es obligatoria").notEmpty(),
+    check("ingresosF", "Los ingresos familiares son obligatorios").notEmpty(),
+    check("promedio", "El promedio debe ser numérico").isNumeric(),
+
     // Validación condicional de assistantshipId solo si aplica
     check("assistantshipId")
       .if((value, { req }) => parseInt(req.body.serviceId) === 3)
