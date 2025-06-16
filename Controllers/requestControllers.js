@@ -116,8 +116,57 @@ export const updateRequest = async (req = request, res = response) => {
 
 export const createRequest = async (req = request, res = response) => {
   try {
-    const { serviceId, cedula, requestDate, requestSemester, assistantshipId } = req.body
+    const { 
+      serviceId,
+      cedula,
+      requestDate,
+      requestSemester,
+      assistantshipId,
+      telefono,
+      correo,
+      direccionId,
+      residenciaId,
+      dependencia_economica,
+      ingresosF,
+      promedio} = req.body
+
     const stateId = 1
+
+
+    const baremo = calcularBaremo({ direccionId, dependencia_economica, residenciaId });
+        console.log(`Baremo asignado: ${baremo}`);
+    
+        // Consulta SQL clara y bien formateada
+        const baremoSql = 
+        `
+          UPDATE public.student
+          SET
+            telefono = $1,
+            correo = $2,
+            "ingresosF" = $3,
+            baremo = $4,
+            "dependenciaEconomica" = $5,
+            "direccionId" = $6,
+            "promedio" = $7,
+            "residenciaId" = $8
+          WHERE cedula = $9;
+        `;
+    
+        const values = [
+          telefono,
+          correo,
+          ingresosF,
+          baremo,
+          dependencia_economica,
+          direccionId,
+          promedio,
+          residenciaId,
+          cedula
+        ];
+    
+        await client.query(baremoSql, values);
+
+
 
     const sql = `SELECT * FROM student WHERE cedula = $1`;
     const studentData = await client.query(sql, [cedula]);
@@ -126,7 +175,6 @@ export const createRequest = async (req = request, res = response) => {
 }
 
     const semester = studentData.rows[0].semester;
-    const promedio = studentData.rows[0].promedio;
 
     if(serviceId != 3){
       if(serviceId == 2){
