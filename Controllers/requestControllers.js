@@ -140,7 +140,14 @@ export const createRequest = async (req = request, res = response) => {
         return res.status(400).json({ status: "Failed", error: "direccionId proporcionado no existe" });
     }
 
-    const baremo = calcularBaremo({ direccionId, dependencia_economica, residenciaId });
+    console.log('serviceId recibido:', serviceId);
+    console.log('requestSemester recibido:', requestSemester);
+
+    console.log('direccionId para baremo:', direccionId);
+    console.log('dependencia_economica para baremo:', dependencia_economica);
+    console.log('residenciaId para baremo:', residenciaId);
+
+    const baremo = calcularBaremo({ direccionId, dependencia_economica: ingresosF, residenciaId });
         console.log(`Baremo asignado: ${baremo}`);
     
         // Consulta SQL clara y bien formateada
@@ -207,7 +214,7 @@ export const createRequest = async (req = request, res = response) => {
       await client.query(sql, values);
     }else{
       
-      if(semester < 7){
+      if(requestSemester < 7){
         return res.status(400).json({ status: "Failed", error: "debe estar minimo en el septimo semestre para optar por este beneficio"});
       }
       if(promedio < 14){
@@ -232,6 +239,22 @@ export const createRequest = async (req = request, res = response) => {
     }
 
     res.status(201).json({ status: "Created" });
+  } catch (err) {
+    res.status(500).json({
+      status: "Failed",
+      error: err.message,
+    });
+  }
+};
+
+export const deleteRequest = async (req = request, res = response) => {
+  try {
+    const { requestId } = req.body;
+
+    const sql = `DELETE FROM public.request WHERE "requestId" = $1`;
+    await client.query(sql, [requestId]);
+
+    res.status(200).json({ status: "OK", message: "Solicitud eliminada exitosamente" });
   } catch (err) {
     res.status(500).json({
       status: "Failed",

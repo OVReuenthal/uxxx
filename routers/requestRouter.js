@@ -6,7 +6,8 @@ import {
   createRequest,
   getRequests,
   getRequestById,
-  updateRequest
+  updateRequest,
+  deleteRequest
 } from "../Controllers/requestControllers.js";
 
 const requestRouter = express.Router();
@@ -54,6 +55,16 @@ requestRouter.put(
   ],
   validateFields,
   updateRequest
+);
+
+// Eliminar una solicitud
+requestRouter.delete(
+  "/delete_request",
+  [
+    check("requestId", "El ID de la solicitud a eliminar es obligatorio y debe ser numérico").isInt().notEmpty(),
+  ],
+  validateFields,
+  deleteRequest
 );
 
 export  {requestRouter};
