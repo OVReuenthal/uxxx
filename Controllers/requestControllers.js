@@ -100,7 +100,7 @@ export const updateRequest = async (req = request, res = response) => {
     const sql = `
                 UPDATE public.request
                 SET "stateId"=$1
-                WHERE requestId = $2;
+                WHERE "requestId" = $2;
                 `;
 
 
