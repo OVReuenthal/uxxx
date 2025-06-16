@@ -122,5 +122,5 @@ export const logOut = async (req = request, res = response) => {
 };
 
 export const online = async (req = request, res = response) => {
-  res.send("SERVER ONLINE");
+  res.status(200).json({ status: "OK", message: "SERVER ONLINE" });
 };

@@ -18,7 +18,7 @@ const userRouter = express.Router();
 userRouter.post(
   "/user/login",
   [
-    check("name_user", "error name").notEmpty().isLength({ max: 20 }), // this "check" are middlewares
+    check("userName", "error name").notEmpty().isLength({ max: 20 }), // this "check" are middlewares
     check("password", "error password").notEmpty().isLength({ max: 20 }),
     validateFields,
   ],
@@ -28,7 +28,7 @@ userRouter.post(
 userRouter.post(
   "/user/create",
   [
-    check("name_user", "error name").notEmpty().isLength({ max: 20 }),
+    check("userName", "error name").notEmpty().isLength({ max: 20 }),
     check("password", "error password").notEmpty().isLength({ max: 20 }),
     check("rol", "error rol").isBoolean().notEmpty(),
     validateFields,
@@ -40,7 +40,7 @@ userRouter.patch(
   "/user/edit",
   [
     check("id_user", "user error").notEmpty().custom(validateUser),
-    check("name_user", "error name").notEmpty().isLength({ max: 20 }),
+    check("userName", "error name").notEmpty().isLength({ max: 20 }),
     validateFields,
   ],
   editUser
