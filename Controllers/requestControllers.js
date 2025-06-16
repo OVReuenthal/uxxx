@@ -1,5 +1,6 @@
 import { request, response } from "express";
 import { client } from "../DB/db.js";
+import { calcularBaremo } from "../helpers/calculateBaremo.js";
 
 
 export const getRequests = async (req = request, res = response) => {
@@ -132,6 +133,12 @@ export const createRequest = async (req = request, res = response) => {
 
     const stateId = 1
 
+    // Validate direccionId
+    const checkDireccionSql = `SELECT "direccionId" FROM direccion WHERE "direccionId" = $1`;
+    const direccionResult = await client.query(checkDireccionSql, [direccionId]);
+    if (direccionResult.rows.length === 0) {
+        return res.status(400).json({ status: "Failed", error: "direccionId proporcionado no existe" });
+    }
 
     const baremo = calcularBaremo({ direccionId, dependencia_economica, residenciaId });
         console.log(`Baremo asignado: ${baremo}`);
@@ -188,7 +195,7 @@ export const createRequest = async (req = request, res = response) => {
       }
       const sql = `
         INSERT INTO public.request (
-          serviceId,
+          "serviceId",
           cedula,
           "requestDate",
           "requestSemester",
@@ -209,7 +216,7 @@ export const createRequest = async (req = request, res = response) => {
 
       const sql = `
         INSERT INTO public.request (
-          serviceId,
+          "serviceId",
           cedula,
           "requestDate",
           "requestSemester",
